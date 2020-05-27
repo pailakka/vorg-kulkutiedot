@@ -3,6 +3,7 @@ import mqttMatch from 'mqtt-match'
 
 class DigitrafficMQTTClient {
   constructor () {
+    console.log('DigitrafficMQTTClient', 'constructor')
     this.client = null
     this.subscriptions = {}
   }

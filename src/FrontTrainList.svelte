@@ -1,4 +1,5 @@
 <script>
+    import {link} from 'svelte-spa-router'
     import { trains } from './stores/trains'
     import TrainBadge from './TrainBadge.svelte'
 
@@ -11,7 +12,7 @@
         <legend>{category.key}</legend>
         <div class="front-train-container">
             {#each category.trains as train (train.key)}
-                <TrainBadge train={train} />
+                <a href={`/train/${train.key}`} use:link><TrainBadge train={train} /></a>
             {/each}
         </div>
     </fieldset>

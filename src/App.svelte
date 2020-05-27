@@ -1,17 +1,25 @@
 <script>
-    import Router from 'svelte-spa-router'
+    import Router, {link} from 'svelte-spa-router'
+
+    import { trains } from './stores/trains'
     import FrontTrainList from './FrontTrainList.svelte'
+    import TrainPage from './TrainPage.svelte'
     import NotFound from './NotFound.svelte'
 
     const routes = {
         '/': FrontTrainList,
+        '/train/:keyDate/:keyNumber': TrainPage,
         '*': NotFound,
     }
 </script>
 
 <main>
-    <h1>Kulkutiedot</h1>
-    <Router {routes} />
+    <h1><a href="/" use:link>Kulkutiedot</a></h1>
+    {#if $trains.updated === null}
+        <span>Ladataan junien tietoja...</span>
+    {:else}
+        <Router {routes} />
+    {/if}
 </main>
 
 <style>

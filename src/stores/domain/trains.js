@@ -19,6 +19,10 @@ export class Trains {
     this.updated = Date.now()
   }
 
+  getTrain = (trainKey) => {
+    return this.trains[trainKey]
+  }
+
   addTrains = (rawTrains) => {
     rawTrains && rawTrains.forEach(this.setTrain)
   }
@@ -37,8 +41,11 @@ export class Trains {
 
       categories[train.trainCategory].push(train)
     }
-    console.log(Object.keys(categories))
+
     return CATEGORY_ORDER.filter(key => !!categories[key])
-      .map(key => ({key, trains: categories[key]}))
+      .map(key => {
+        categories[key].sort((t1, t2) => t1.trainNumber - t2.trainNumber)
+        return {key, trains: categories[key]}
+      })
   }
 }
