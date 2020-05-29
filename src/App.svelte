@@ -14,7 +14,8 @@
 </script>
 
 <main>
-    <h1><a href="/" use:link>Kulkutiedot</a></h1>
+    <h1>Kulkutiedot</h1>
+    <h2><a href="/" use:link>Junittain</a> - <a href="/asemat" use:link>Asemittain</a></h2>
     {#if $trains.updated === null}
         <span>Ladataan junien tietoja...</span>
     {:else}

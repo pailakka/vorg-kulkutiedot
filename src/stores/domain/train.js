@@ -1,5 +1,5 @@
 class TimeTableRow {
-  constructor (ttr) {
+  constructor (ttr, trainkey) {
     for (const k in ttr) {
       if (!ttr.hasOwnProperty(k)) {
         continue
@@ -12,6 +12,16 @@ class TimeTableRow {
     this.liveEstimateTime = this.liveEstimateTime && new Date(this.liveEstimateTime)
 
     this.referenceTime = this.getReferenceTime()
+
+    if (this.commercialStop) {
+      this.richType = 'COMMERCIAL_' + this.type
+    } else if (!this.trainStopping) {
+      this.richType = 'PASS'
+    } else {
+      this.richType = this.type
+    }
+
+    this.key = `${trainkey}/${this.stationShortCode}/${this.type}/${this.scheduledTime.toISOString()}`
   }
 
   getReferenceTime = () => {
@@ -37,11 +47,12 @@ export class Train {
     }
 
     this.key = this.departureDate + '/' + this.trainNumber
-    this.timeTableRows = this.timeTableRows.map(ttr => new TimeTableRow(ttr))
+    this.timeTableRows = this.timeTableRows.map(ttr => new TimeTableRow(ttr, this.key))
 
     this.running = this.runningCurrently
     this.firstTimetableRow = this.getFirstTimetableRow()
     this.lastTimetableRow = this.getLastTimetableRow()
+    this.lastTrainReady = this.getLastTrainReady()
     this.isUpcoming = this.firstTimetableRow && !this.running && !this.firstTimetableRow.actualTime
     this.isPast = this.lastTimetableRow && !this.running && this.lastTimetableRow.actualTime
     this.lastPassedTimetableRow = this.getLastPassedTimetableRow()
@@ -75,4 +86,12 @@ export class Train {
     }
   }
 
+  getLastTrainReady () {
+    for (let i = this.timeTableRows.length - 1; i >= 0; i--) {
+      const ttr = this.timeTableRows[i]
+      if (ttr.trainReady) {
+        return ttr.trainReady
+      }
+    }
+  }
 }

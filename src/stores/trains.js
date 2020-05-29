@@ -11,8 +11,7 @@ export const baseTrains = readable(new Trains(), (set) => {
       fetch('https://rata.digitraffic.fi/api/v1/live-trains?version=' + trains.maxVersion)
         .then(r => r.json())
         .then(rawTrains => {
-          trains.addTrains(rawTrains)
-          set(trains)
+          set(trains.addTrains(rawTrains))
         }).catch((e) => {
         throw e
       })
@@ -25,12 +24,24 @@ export const baseTrains = readable(new Trains(), (set) => {
   }
 })
 
-export const trains = derived(baseTrains, (trains,set) => {
+export const trains = derived(baseTrains, (trains, set) => {
   set(trains)
-  DTMQTT.addSubscription('trains/#',(topic, message) => {
-    const train = JSON.parse(message)
-    trains.setTrain(train)
-    set(trains)
+  let trainUpdateQueue = []
+  DTMQTT.addSubscription('trains/#', (topic, message) => {
+    trainUpdateQueue.push(JSON.parse(message))
 
   })
-})
+
+  const emptyInterval = setInterval(() => {
+    if (trainUpdateQueue.length > 0) {
+      console.log('trainUpdateQueue',trainUpdateQueue.map(t => t.trainNumber))
+      set(trains.addTrains(trainUpdateQueue))
+      trainUpdateQueue = []
+    }
+  }, 500);
+
+  return () => {
+    clearInterval(emptyInterval);
+  };
+
+}, new Trains())
