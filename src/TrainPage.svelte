@@ -1,18 +1,15 @@
 <script>
-    import { trains } from './stores/trains'
-    import { link } from 'svelte-spa-router'
-    import { settings } from './stores/settings'
+    import {trains} from './stores/trains'
+    import {link} from 'svelte-spa-router'
+    import {settings} from './stores/settings'
+    import Operator from './Operator.svelte'
     import TrainTimeTableRow from './TrainTimeTableRow.svelte'
-    import { onDestroy } from 'svelte'
-    import { cloneDeep } from 'lodash'
 
     export let params = {}
     const trainKey = `${params.keyDate}/${params.keyNumber}`
 
     let train
     $: train = $trains.getTrain(trainKey)
-
-    $: console.log('TrainPage','train', train)
 
 </script>
 <div>
@@ -22,7 +19,7 @@
         <label>Näytä ohitukset <input type=checkbox bind:checked={$settings.showPassing}></label>
     </div>
     <a href="/" use:link>Palaa takaisin junalistaukseen</a>
-    <h2>{train.trainNumber} / {train.departureDate} / {train.version}</h2>
+    <h2>{train.trainNumber} / {train.departureDate}}</h2>
     <table>
         <tr>
             <th>Tyyppi:</th>
@@ -42,7 +39,9 @@
         </tr>
         <tr>
             <th>Operaattori:</th>
-            <td>{train.operatorShortCode}</td>
+            <td>
+                <Operator operatorShortCode={train.operatorShortCode}/>
+            </td>
         </tr>
         <tr>
             <th>Kulussa:</th>
@@ -59,6 +58,14 @@
         <tr>
             <th>Aikataulu hyväksytty:</th>
             <td>{train.timetableAcceptanceDate}</td>
+        </tr>
+        <tr>
+            <th>Tietojen versio:</th>
+            <td>{train.version}</td>
+        </tr>
+        <tr>
+            <th>Tiedot päivitetty:</th>
+            <td>{train.updated}</td>
         </tr>
     </table>
     {#if train.lastTrainReady !== undefined}
@@ -92,8 +99,8 @@
             <th>Syykoodit</th>
         </tr>
         </thead>
-        {#each train.timeTableRows as ttr (ttr.key)}
-            <TrainTimeTableRow {ttr} />
+        {#each train.timeTableRows.filter(ttr => $settings.showPassing || ttr.trainStopping) as ttr (ttr.key)}
+            <TrainTimeTableRow {ttr}/>
         {/each}
     </table>
     <pre>{JSON.stringify(train, null, 4)}</pre>

@@ -17,10 +17,12 @@ export class Trains {
     if (train.version > this.maxVersion) {
       this.maxVersion = train.version
     }
+    train.updated = Date.now()
     this.trains[train.key] = train
-    console.log('setTrain', new Date(), train.key, train)
+    // console.log('setTrain', new Date(), train.key, train)
     this.updated = Date.now()
     this.categories.add(train.trainCategory)
+    return train
   }
 
   getTrain = (trainKey) => {
@@ -28,12 +30,11 @@ export class Trains {
   }
 
   addTrains = (rawTrains) => {
-    if (!rawTrains || rawTrains.length == 0) return this;
+    if (!rawTrains || rawTrains.length === 0) return this;
     console.log('addTrains',rawTrains.map(t => t.trainNumber))
     let changedTrains = {}
     rawTrains.forEach(rw => {
-      const nt = new Train(rw)
-      this.setTrain(rw)
+      const nt = this.setTrain(rw)
       changedTrains[nt.key] = nt
     })
 

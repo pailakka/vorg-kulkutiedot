@@ -15,13 +15,11 @@ class DigitrafficMQTTClient {
     })
 
     this.client.on('message', (topic, message) => {
-      console.log('message from', topic, Object.keys(this.subscriptions))
       for (const subbedTopic in this.subscriptions) {
         if (!this.subscriptions.hasOwnProperty(subbedTopic)) {
           continue
         }
         if (mqttMatch(subbedTopic, topic)) {
-          console.log('matched with', subbedTopic)
           this.subscriptions[subbedTopic](topic, message)
           break
         }
@@ -40,7 +38,6 @@ class DigitrafficMQTTClient {
       if (err) {
         return console.error(err)
       }
-      console.log('subbed to', Object.keys(this.subscriptions))
     })
   }
 }
