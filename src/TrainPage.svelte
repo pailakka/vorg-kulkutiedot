@@ -4,6 +4,8 @@
     import {settings} from './stores/settings'
     import Operator from './Operator.svelte'
     import TrainTimeTableRow from './TrainTimeTableRow.svelte'
+    import TrainComposition from './TrainComposition.svelte'
+    import TrainRoutesets from './TrainRoutesets.svelte'
 
     export let params = {}
     const trainKey = `${params.keyDate}/${params.keyNumber}`
@@ -45,7 +47,7 @@
         </tr>
         <tr>
             <th>Kulussa:</th>
-            <td>{train.runningCurrently}</td>
+            <td>{train.runningCurrently ? "Kyllä" : "Ei"}</td>
         </tr>
         <tr>
             <th>Peruttu:</th>
@@ -103,5 +105,7 @@
             <TrainTimeTableRow {ttr}/>
         {/each}
     </table>
+    <TrainComposition trainNumber={train.trainNumber} departureDate={train.departureDate}/>
+    <TrainRoutesets trainNumber={train.trainNumber} departureDate={train.departureDate}/>
     <pre>{JSON.stringify(train, null, 4)}</pre>
 </div>

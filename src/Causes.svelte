@@ -9,7 +9,6 @@
         const mostDetailedCause = $causeCodes[mostDetailedId]
         return mostDetailedCause
     })
-    $: console.log('displayCauses', displayCauses, '$causeCodes', $causeCodes)
 </script>
 {#if displayCauses}
     {#each displayCauses as cause,i (cause.id) }
