@@ -1,30 +1,13 @@
 <script>
     import { link } from 'svelte-spa-router'
     import { trains } from './stores/trains'
-    import { now } from './stores/now'
     import { settings } from './stores/settings'
+    import { filterTrains } from './lib/util'
     import TrainBadge from './TrainBadge.svelte'
-
-    $: console.log('settings', $settings)
-    $: console.log('trains', $trains)
-    $: console.log('now', now)
-
-    const filterTrains = (currentSettings) => {
-        const {showOnlyRunning, filterTrainCategories, filterTrainTypes, filterCommuterLineID} = currentSettings
-        const filterCategoriesSet = new Set(filterTrainCategories)
-        const filterTrainTypesSet = new Set(filterTrainTypes.split(',').map(s => s.toUpperCase()))
-        const filterCommuterLineIDSet = new Set(filterCommuterLineID.split(',').map(s => s.toUpperCase()))
-        return (train) => {
-            if (showOnlyRunning && !train.running) return false;
-            if (filterTrainCategories.length > 0 && !filterCategoriesSet.has(train.trainCategory)) return false;
-            if (filterTrainTypes.length > 0 && !filterTrainTypesSet.has(train.trainType)) return false;
-            if (filterCommuterLineID.length > 0 && !filterCommuterLineIDSet.has(train.commuterLineID)) return false;
-            return true;
-        }
-    }
+    import FormattedDate from './FormattedDate.svelte'
 
 </script>
-<span>{$trains.maxVersion} / {$trains.updated}</span>
+<span>Junien tiedot päivitetty: <FormattedDate date={$trains.updated} /></span>
 <div>
     <h3>Suodattimet</h3>
     <label>Näytä vain junalajit <select multiple bind:value={$settings.filterTrainCategories}>

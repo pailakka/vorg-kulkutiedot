@@ -1,27 +1,30 @@
 <script>
-    import {trains} from './stores/trains'
-    import {link} from 'svelte-spa-router'
-    import {settings} from './stores/settings'
+    import { trains } from './stores/trains'
+    import { link } from 'svelte-spa-router'
+    import { settings } from './stores/settings'
     import Operator from './Operator.svelte'
     import TrainTimeTableRow from './TrainTimeTableRow.svelte'
     import TrainComposition from './TrainComposition.svelte'
     import TrainRoutesets from './TrainRoutesets.svelte'
+    import TrainTracking from './TrainTracking.svelte'
+    import FormattedDate from './FormattedDate.svelte'
 
     export let params = {}
     const trainKey = `${params.keyDate}/${params.keyNumber}`
 
+    let showTrainRouteSets = false
+    let showTrainTracking = false
     let train
     $: train = $trains.getTrain(trainKey)
 
 </script>
 <div>
-    <span>{$trains.maxVersion} / {$trains.updated}</span>
     <div>
         <h3>Suodattimet</h3>
         <label>Näytä ohitukset <input type=checkbox bind:checked={$settings.showPassing}></label>
     </div>
     <a href="/" use:link>Palaa takaisin junalistaukseen</a>
-    <h2>{train.trainNumber} / {train.departureDate}}</h2>
+    <h2>{train.trainNumber} / {train.departureDate}</h2>
     <table>
         <tr>
             <th>Tyyppi:</th>
@@ -42,7 +45,7 @@
         <tr>
             <th>Operaattori:</th>
             <td>
-                <Operator operatorShortCode={train.operatorShortCode}/>
+                <Operator operatorShortCode={train.operatorShortCode} />
             </td>
         </tr>
         <tr>
@@ -67,7 +70,7 @@
         </tr>
         <tr>
             <th>Tiedot päivitetty:</th>
-            <td>{train.updated}</td>
+            <td><FormattedDate date={train.updated}/></td>
         </tr>
     </table>
     {#if train.lastTrainReady !== undefined}
@@ -102,10 +105,18 @@
         </tr>
         </thead>
         {#each train.timeTableRows.filter(ttr => $settings.showPassing || ttr.trainStopping) as ttr (ttr.key)}
-            <TrainTimeTableRow {ttr}/>
+            <TrainTimeTableRow {ttr} />
         {/each}
     </table>
-    <TrainComposition trainNumber={train.trainNumber} departureDate={train.departureDate}/>
-    <TrainRoutesets trainNumber={train.trainNumber} departureDate={train.departureDate}/>
-    <pre>{JSON.stringify(train, null, 4)}</pre>
+    <TrainComposition trainNumber={train.trainNumber} departureDate={train.departureDate} />
+    <h3><a on:click={() => showTrainRouteSets = !showTrainRouteSets}>{#if showTrainRouteSets}
+        Kulkutievaraukset{:else}Näytä kulkutievaraukset{/if}</a></h3>
+    {#if showTrainRouteSets}
+        <TrainRoutesets trainNumber={train.trainNumber} departureDate={train.departureDate} />
+    {/if}
+    <h3><a on:click={() => showTrainTracking = !showTrainTracking}>{#if showTrainTracking}
+        Kulkutieviestit{:else}Näytä kulkutieviestit{/if}</a></h3>
+    {#if showTrainTracking}
+        <TrainTracking trainNumber={train.trainNumber} departureDate={train.departureDate} />
+    {/if}
 </div>

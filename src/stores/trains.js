@@ -20,7 +20,7 @@ export const baseTrains = readable(new Trains(), (set) => {
   })
 
   return function stop () {
-    console.log('baseTrains', 'stop')
+
   }
 })
 
@@ -34,7 +34,6 @@ export const trains = derived(baseTrains, (trains, set) => {
 
   const emptyInterval = setInterval(() => {
     if (trainUpdateQueue.length > 0) {
-      console.log('trainUpdateQueue',trainUpdateQueue.map(t => t.trainNumber))
       set(trains.addTrains(trainUpdateQueue))
       trainUpdateQueue = []
     }

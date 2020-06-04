@@ -1,10 +1,10 @@
 <script>
     import {stations} from './stores/metadata'
 
-    export let stationUICCode = null
+    export let stationShortCode = null
 
     let station
-    $: station = $stations[stationUICCode]
+    $: station = $stations[stationShortCode]
 </script>
 
 

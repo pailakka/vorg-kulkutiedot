@@ -8,7 +8,7 @@ export const stations = readable({}, (set) => {
         .then(rawStations => {
             const stations = {}
             rawStations.forEach(rs => {
-                stations[rs.stationUICCode] = rs
+                stations[rs.stationShortCode] = rs
             })
             set(stations)
 

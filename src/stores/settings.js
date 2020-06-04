@@ -5,7 +5,8 @@ const DEFAULT_SETTINGS = {
   filterTrainCategories: [],
   filterTrainTypes: '',
   filterCommuterLineID: '',
-  showPassing: false
+  showPassing: false,
+  hideEmptyStations: false
 
 }
 export const settings = writable(DEFAULT_SETTINGS)

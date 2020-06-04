@@ -33,7 +33,15 @@ class DigitrafficMQTTClient {
     this._doSubscriptions()
   }
 
+  removeSubscription = (topic) => {
+    this.subscriptions[topic] = undefined
+    delete this.subscriptions[topic]
+    this.client.unsubscribe(topic)
+    console.log('unsubscribe', topic, this.subscriptions)
+  }
+
   _doSubscriptions () {
+    console.log('subscribe', this.subscriptions)
     this.client.subscribe(Object.keys(this.subscriptions), err => {
       if (err) {
         return console.error(err)

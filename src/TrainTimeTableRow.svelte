@@ -1,4 +1,5 @@
 <script>
+    import { link } from 'svelte-spa-router'
     import FormattedDate from './FormattedDate.svelte'
     import Station from './Station.svelte'
     import Causes from './Causes.svelte'
@@ -11,7 +12,7 @@
 
 <tr>
     <td>
-        <Station stationUICCode={ttr.stationUICCode}/>
+        <a href={`/stations/${ttr.stationShortCode}`} use:link><Station stationShortCode={ttr.stationShortCode}/></a>
     </td>
     <td>{ttr.commercialTrack}</td>
     <td>{EVENT_HUMAN_READABLE[ttr.richType] ? EVENT_HUMAN_READABLE[ttr.richType] : ttr.richType}</td>
@@ -24,6 +25,6 @@
     <td>
         <FormattedDate date={ttr.actualTime}/>
     </td>
-    <td>{ttr.differenceInMinutes}</td>
+    <td>{ttr.differenceInMinutes ? ttr.differenceInMinutes : ''}</td>
     <td>{#if ttr.causes.length > 0}<Causes causes={ttr.causes}/>{/if}</td>
 </tr>

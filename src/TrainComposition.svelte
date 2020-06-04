@@ -30,9 +30,9 @@
             {#each composition.journeySections as section}
                 <tr>
                     <td>
-                        <Station stationUICCode={section.beginTimeTableRow.stationUICCode}/>
+                        <Station stationShortCode={section.beginTimeTableRow.stationShortCode}/>
                         -
-                        <Station stationUICCode={section.endTimeTableRow.stationUICCode}/>
+                        <Station stationShortCode={section.endTimeTableRow.stationShortCode}/>
                     </td>
                     <td>{section.locomotives.map(loc => loc.locomotiveType).join(', ')}</td>
                     <td>{section.wagons.map(wag => wag.wagonType).join(', ')}</td>

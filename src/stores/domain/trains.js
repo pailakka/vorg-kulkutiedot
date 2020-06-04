@@ -17,10 +17,9 @@ export class Trains {
     if (train.version > this.maxVersion) {
       this.maxVersion = train.version
     }
-    train.updated = Date.now()
+    train.updated = new Date()
     this.trains[train.key] = train
-    // console.log('setTrain', new Date(), train.key, train)
-    this.updated = Date.now()
+    this.updated = new Date()
     this.categories.add(train.trainCategory)
     return train
   }
@@ -30,15 +29,14 @@ export class Trains {
   }
 
   addTrains = (rawTrains) => {
-    if (!rawTrains || rawTrains.length === 0) return this;
-    console.log('addTrains',rawTrains.map(t => t.trainNumber))
+    if (!rawTrains || rawTrains.length === 0) return this;
     let changedTrains = {}
     rawTrains.forEach(rw => {
       const nt = this.setTrain(rw)
       changedTrains[nt.key] = nt
     })
 
-    Object.assign(this.trains,changedTrains)
+    Object.assign(this.trains, changedTrains)
     return this
   }
   getCategories = () => {
@@ -67,8 +65,40 @@ export class Trains {
       })
   }
 
+  trainsByStation = (onlyStation, filterFunc) => {
+    let stations = {}
+    for (const tk in this.trains) {
+      if (!this.trains.hasOwnProperty(tk)) {
+        continue
+      }
+      const train = this.trains[tk]
+
+      if (filterFunc && !filterFunc(train)) {
+        continue
+      }
+
+
+      train.timeTableRows.forEach(ttr => {
+        const {stationShortCode} = ttr
+        if (onlyStation && stationShortCode !== onlyStation) {
+          return true
+        }
+
+        if (stations[stationShortCode] === undefined) {
+          stations[stationShortCode] = []
+        }
+
+        stations[stationShortCode].push({train, ttr})
+      })
+    }
+
+    if (onlyStation) {
+      return stations[onlyStation]
+    }
+    return stations
+  }
+
   static cloneFrom (other) {
-    console.log('cloneFrom')
     const newTrains = new Trains([])
     for (const tk in other.trains) {
       if (!other.trains.hasOwnProperty(tk)) {
