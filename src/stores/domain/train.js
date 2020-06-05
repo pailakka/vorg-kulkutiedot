@@ -13,7 +13,9 @@ class TimeTableRow {
 
     this.referenceTime = this.getReferenceTime()
 
-    if (this.commercialStop) {
+    if (this.cancelled) {
+      this.richType = 'CANCELLED'
+    } else if (this.commercialStop) {
       this.richType = 'COMMERCIAL_' + this.type
     } else if (!this.trainStopping) {
       this.richType = 'PASS'

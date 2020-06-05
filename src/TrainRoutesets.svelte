@@ -68,7 +68,7 @@
 {#if routesets === null}
     <span>Ladataan kulkutievarauksia... {departureDate} / {trainNumber}</span>
 {:else}
-    <table>
+    <table class="zebra">
         <thead>
         <tr>
             <th>Liikennepaikka</th>
@@ -90,3 +90,9 @@
         </tbody>
     </table>
 {/if}
+
+<style>
+    table {
+        width: 100%;
+    }
+</style>

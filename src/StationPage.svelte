@@ -1,10 +1,11 @@
 <script>
-    import { link } from 'svelte-spa-router'
-    import { sortBy } from 'lodash'
-    import { stations } from './stores/metadata'
-    import { trains } from './stores/trains'
-    import { settings } from './stores/settings'
-    import { filterTrains } from './lib/util'
+    import {link} from 'svelte-spa-router'
+    import {sortBy} from 'lodash'
+    import {stations} from './stores/metadata'
+    import {trains} from './stores/trains'
+    import {settings} from './stores/settings'
+    import {filterTrains} from './lib/util'
+    import {EVENT_HUMAN_READABLE} from "./stores/metadata"
     import FormattedDate from './FormattedDate.svelte'
     import Causes from './Causes.svelte'
     import Station from './Station.svelte'
@@ -12,7 +13,6 @@
     export let params = {}
 
     const paramShortCode = decodeURI(params.stationShortCode)
-    console.log('params.stationShortCode',params.stationShortCode)
 
     let station = null
     let stationTrains = null
@@ -36,19 +36,18 @@
                 {category}
             </option>
         {/each}
-    </select></label>
-    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label>
-    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label>
+    </select></label><br/>
+    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label><br/>
+    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label><br/>
     <label>Näytä vain kulussa olevat junat <input type=checkbox bind:checked={$settings.showOnlyRunning}></label>
 </div>
 <a href="/stations" use:link>Palaa takaisin asemalistaukseen</a>
 {#if station}
     <h2>{station.stationName} ({station.stationShortCode} / {station.stationUICCode})</h2>
-    <span><strong>Tyyppi:</strong> {station.type}
-        , <strong>Matkustajaliikennettä:</strong> {station.passengerTraffic}</span>
+    <span><strong>Tyyppi:</strong> {station.type} <strong>Matkustajaliikennettä:</strong> {station.passengerTraffic ? "Kyllä" : "Ei"}</span>
     <h3>Kulkutiedot</h3>
     {#if stationTrains}
-        <table>
+        <table class="zebra">
             <thead>
             <tr>
                 <th>Juna</th>
@@ -70,25 +69,25 @@
                     <td><a href={`/train/${train.key}`}
                            use:link>{train.commuterLineID || train.trainType} {train.trainNumber}</a></td>
                     <td>{ttr.commercialTrack}</td>
-                    <td>{ttr.richType}</td>
+                    <td>{EVENT_HUMAN_READABLE[ttr.richType] ? EVENT_HUMAN_READABLE[ttr.richType] : ttr.richType}</td>
                     <td>
-                        <FormattedDate date={ttr.scheduledTime} />
+                        <FormattedDate date={ttr.scheduledTime}/>
                     </td>
                     <td>
-                        <FormattedDate date={ttr.liveEstimateTime} />
+                        <FormattedDate date={ttr.liveEstimateTime}/>
                     </td>
                     <td>
-                        <FormattedDate date={ttr.actualTime} />
+                        <FormattedDate date={ttr.actualTime}/>
                     </td>
                     <td>{ttr.differenceInMinutes ? ttr.differenceInMinutes : ''}</td>
                     <td>{#if ttr.causes.length > 0}
-                        <Causes causes={ttr.causes} />{/if}</td>
+                        <Causes causes={ttr.causes}/>{/if}</td>
                     <td>
                         {#if train.cancelled}
                             Peruttu
                         {:else}
                             <a href={`/stations/${train.getFirstTimetableRow().stationShortCode}`} use:link>
-                                <Station stationShortCode={train.getFirstTimetableRow().stationShortCode} />
+                                <Station stationShortCode={train.getFirstTimetableRow().stationShortCode}/>
                             </a>
                         {/if}
 
@@ -99,7 +98,7 @@
                         {:else}
 
                             <a href={`/stations/${train.getLastTimetableRow().stationShortCode}`} use:link>
-                                <Station stationShortCode={train.getLastTimetableRow().stationShortCode} />
+                                <Station stationShortCode={train.getLastTimetableRow().stationShortCode}/>
                             </a>
                         {/if}
                     </td>
@@ -113,3 +112,9 @@
 {:else}
     Asemaa ei löydy
 {/if}
+
+<style>
+    table {
+        width: 100%;
+    }
+</style>

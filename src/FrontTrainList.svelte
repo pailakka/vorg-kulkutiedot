@@ -16,9 +16,9 @@
                 {category}
             </option>
         {/each}
-    </select></label>
-    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label>
-    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label>
+    </select></label><br/>
+    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label><br/>
+    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label><br/>
     <label>Näytä vain kulussa olevat junat <input type=checkbox bind:checked={$settings.showOnlyRunning}></label>
 </div>
 {#each $trains.trainsByCategory() as category (category.key)}

@@ -16,7 +16,7 @@
     {#if composition.errorMessage}
         <p>Virhe: {composition.errorMessage}</p>
     {:else}
-        <table>
+        <table class="zebra">
             <thead>
             <tr>
                 <th>Kulkuväli</th>
@@ -46,3 +46,9 @@
 {:catch error}
     <p>Kokoonpanon lataaminen epäonnistui</p>
 {/await}
+
+<style>
+    table {
+        width: 100%;
+    }
+</style>

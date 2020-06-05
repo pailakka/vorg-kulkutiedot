@@ -66,5 +66,6 @@ export const EVENT_HUMAN_READABLE = {
     'COMMERCIAL_ARRIVAL': 'Saapuu (kaup)',
     'DEPARTURE': 'Lähtee',
     'ARRIVAL': 'Saapuu',
-    'PASS': 'Ohittaa'
+    'PASS': 'Ohittaa',
+    'CANCELLED': 'Peruttu'
 }

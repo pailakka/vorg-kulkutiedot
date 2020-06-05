@@ -36,7 +36,29 @@ export default {
             dedupe: ['svelte']
         }),
         commonjs(),
-        babel({babelHelpers: 'runtime', plugins: ['@babel/plugin-transform-runtime']}),
+        babel({
+            babelHelpers: 'runtime',
+            exclude: ['node_modules/@babel/**'],
+            plugins: !production ? [
+                "transform-class-properties",
+                "@babel/plugin-transform-runtime",
+            ] : [
+                "transform-class-properties",
+                "@babel/plugin-transform-runtime",
+                "transform-remove-console"
+            ],
+            extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.svelte'],
+            presets: [
+                [
+                    "@babel/preset-env",
+                    {
+                        targets: "> 0.25%, not dead",
+                        useBuiltIns: "usage",
+                        corejs: 3
+                    }
+                ]
+            ]
+        }),
         // In dev mode, call `npm run start` once
         // the bundle has been generated
         !production && serve(),

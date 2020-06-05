@@ -30,7 +30,7 @@
     });
 
 </script>
-<table>
+<table class="zebra">
     <thead>
     <tr>
         <th>Aika</th>
@@ -52,3 +52,9 @@
     {/each}
     </tbody>
 </table>
+
+<style>
+    table {
+        width: 100%;
+    }
+</style>

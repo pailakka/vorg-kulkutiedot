@@ -25,7 +25,7 @@
     </div>
     <a href="/" use:link>Palaa takaisin junalistaukseen</a>
     <h2>{train.trainNumber} / {train.departureDate}</h2>
-    <table>
+    <table class="zebra">
         <tr>
             <th>Tyyppi:</th>
             <td>{train.trainCategory}</td>
@@ -54,7 +54,7 @@
         </tr>
         <tr>
             <th>Peruttu:</th>
-            <td>{train.cancelled}</td>
+            <td>{train.cancelled ? "Kyllä" : "Ei"}</td>
         </tr>
         <tr>
             <th>Aikataululaji:</th>
@@ -75,14 +75,14 @@
     </table>
     {#if train.lastTrainReady !== undefined}
         <h3>Lähtövalmiusilmoitus</h3>
-        <table>
+        <table class="zebra">
             <tr>
                 <th>Aika:</th>
                 <td>{train.lastTrainReady.timestamp}</td>
             </tr>
             <tr>
                 <th>Hyväksytty:</th>
-                <td>{train.lastTrainReady.accepted}</td>
+                <td>{train.lastTrainReady.accepted ? "Kyllä" : "Ei"}</td>
             </tr>
             <tr>
                 <th>Järjestelmä:</th>
@@ -91,7 +91,7 @@
         </table>
     {/if}
     <h3>Kulkutiedot</h3>
-    <table>
+    <table class="zebra">
         <thead>
         <tr>
             <th>Asema</th>
@@ -120,3 +120,9 @@
         <TrainTracking trainNumber={train.trainNumber} departureDate={train.departureDate} />
     {/if}
 </div>
+
+<style>
+    table {
+        width: 100%;
+    }
+</style>

@@ -14,7 +14,6 @@
 
         const trainFilter = filterTrains($settings)
         trainsByStations = $trains.trainsByStation(null, trainFilter)
-        console.log('trainsByStations',trainsByStations)
         Object.values($stations).forEach(st => {
             const firstLetter = st.stationShortCode[0]
             st.trainCount = trainsByStations[st.stationShortCode] ? trainsByStations[st.stationShortCode].length : 0
@@ -35,10 +34,10 @@
                 {category}
             </option>
         {/each}
-    </select></label>
-    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label>
-    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label>
-    <label>Näytä vain kulussa olevat junat <input type=checkbox bind:checked={$settings.showOnlyRunning}></label>
+    </select></label><br/>
+    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label><br/>
+    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label><br/>
+    <label>Näytä vain kulussa olevat junat <input type=checkbox bind:checked={$settings.showOnlyRunning}></label><br/>
     <label>Näytä vain asemat joilla junia <input type=checkbox bind:checked={$settings.hideEmptyStations}></label>
 </div>
 {#each  firstLetters as firstLetter}
