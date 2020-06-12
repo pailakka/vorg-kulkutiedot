@@ -41,7 +41,7 @@
 <div>
     <form class="pure-form pure-form-stacked">
         <fieldset>
-            <legend><h3>Suodattimet</h3></legend>
+            <legend>Suodattimet</legend>
             <div class="pure-g">
                 <div class="pure-u-1 pure-u-md-1-3">
                     <br/>
@@ -62,7 +62,7 @@
                 </div>
             </div>
             <fieldset>
-                <legend><h4>Suodata junalajeja</h4></legend>
+                <legend>Suodata junalajeja</legend>
                 <div class="cateogry-container">
                     {#each $trains.getCategories() as category}
                         <div class="category-input">
@@ -79,7 +79,7 @@
     <div>
         {#each compTypeKeys as compType (compType)}
             <fieldset>
-                <legend><h3>{compType}</h3></legend>
+                <legend>{compType}</legend>
                 <div class="front-train-container">
                     {#each $trains.getTrainsByKeys(Array.from(compTypes[compType]),filterTrains($settings)) as train}
                         <a href={`/train/${train.key}`} use:link>
