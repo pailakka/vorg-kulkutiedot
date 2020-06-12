@@ -12,7 +12,7 @@
 <div>
     <form class="pure-form pure-form-stacked">
         <fieldset>
-            <legend>Suodattimet</legend>
+            <legend><h3>Suodattimet</h3></legend>
             <div class="pure-g">
                 <div class="pure-u-1 pure-u-md-1-3">
                     <br/>
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <fieldset>
-                <legend>Suodata junalajeja</legend>
+                <legend><h4>Suodata junalajeja</h4></legend>
                 <div class="cateogry-container">
                     {#each $trains.getCategories() as category}
                         <div class="category-input">
@@ -48,7 +48,7 @@
 </div>
 {#each $trains.trainsByCategory() as category (category.key)}
     <fieldset>
-        <legend>{CATEGORY_TRANSLATE[category.key] || category.key}</legend>
+        <legend><h3>{CATEGORY_TRANSLATE[category.key] || category.key}</h3></legend>
         <div class="front-train-container">
             {#each category.trains.filter(filterTrains($settings)) as train (train.key)}
                 <a href={`/train/${train.key}`} use:link>
