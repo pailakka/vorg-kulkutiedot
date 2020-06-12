@@ -45,4 +45,8 @@
     nav h2 {
         width: 50%;
     }
+
+    :global(legend) {
+        background: none !important;
+    }
 </style>
