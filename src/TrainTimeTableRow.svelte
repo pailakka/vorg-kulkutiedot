@@ -26,5 +26,8 @@
         <FormattedDate date={ttr.actualTime}/>
     </td>
     <td>{ttr.differenceInMinutes ? ttr.differenceInMinutes : ''}</td>
-    <td>{#if ttr.causes.length > 0}<Causes causes={ttr.causes}/>{/if}</td>
+    <td>
+        {#if ttr.trainReady}Lähtövalmius: <FormattedDate date={new Date(ttr.trainReady.timestamp)}/>{#if ttr.causes.length > 0}<br/>{/if}{/if}
+        {#if ttr.causes.length > 0}<Causes causes={ttr.causes}/>{/if}
+    </td>
 </tr>

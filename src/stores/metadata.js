@@ -63,7 +63,7 @@ export const causeCodes = readable(undefined, (set) => {
 
 export const EVENT_HUMAN_READABLE = {
     'COMMERCIAL_DEPARTURE': 'Lähtee',
-    'COMMERCIAL_ARRIVAL': 'Saapuu (kaup)',
+    'COMMERCIAL_ARRIVAL': 'Saapuu (K)',
     'DEPARTURE': 'Lähtee',
     'ARRIVAL': 'Saapuu',
     'PASS': 'Ohittaa',

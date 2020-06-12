@@ -9,6 +9,7 @@
     import FormattedDate from './FormattedDate.svelte'
     import Causes from './Causes.svelte'
     import Station from './Station.svelte'
+    import {CATEGORY_TRANSLATE} from "./stores/domain/trains";
 
     export let params = {}
 
@@ -29,25 +30,48 @@
 </script>
 
 <div>
-    <h3>Suodattimet</h3>
-    <label>Näytä vain junalajit <select multiple bind:value={$settings.filterTrainCategories}>
-        {#each $trains.getCategories() as category}
-            <option value={category}>
-                {category}
-            </option>
-        {/each}
-    </select></label><br/>
-    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label><br/>
-    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label><br/>
-    <label>Näytä vain kulussa olevat junat <input type=checkbox bind:checked={$settings.showOnlyRunning}></label>
+    <form class="pure-form pure-form-stacked">
+        <fieldset>
+            <legend><h3>Suodattimet</h3></legend>
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <br/>
+                    <button class="pure-button"
+                            class:pure-button-active={$settings.showOnlyRunning}
+                            on:click={() => $settings.showOnlyRunning = !$settings.showOnlyRunning}
+                            type="button">
+                        {$settings.showOnlyRunning ? "Näytä kaikki junat" : "Näytä vain kulussa olevat junat"}
+                    </button>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <label>Näytä vain junatyypit</label>
+                    <input type=text bind:value={$settings.filterTrainTypes} class="pure-u-23-24">
+                </div>
+                <div class="pure-u-1 pure-u-md-1-3">
+                    <label>Näytä vain linjatunnukset</label>
+                    <input type=text bind:value={$settings.filterCommuterLineID} class="pure-u-23-24">
+                </div>
+            </div>
+            <fieldset>
+                <legend><h4>Suodata junalajeja</h4></legend>
+                <div class="cateogry-container">
+                    {#each $trains.getCategories() as category}
+                        <div class="category-input">
+                            <label>{CATEGORY_TRANSLATE[category] || category} <input type="checkbox" value={category}
+                                                                                     bind:group={$settings.filterTrainCategories}/></label>
+                        </div>
+                    {/each}
+                </div>
+            </fieldset>
+        </fieldset>
+    </form>
 </div>
 <a href="/stations" use:link>Palaa takaisin asemalistaukseen</a>
 {#if station}
     <h2>{station.stationName} ({station.stationShortCode} / {station.stationUICCode})</h2>
-    <span><strong>Tyyppi:</strong> {station.type} <strong>Matkustajaliikennettä:</strong> {station.passengerTraffic ? "Kyllä" : "Ei"}</span>
     <h3>Kulkutiedot</h3>
     {#if stationTrains}
-        <table class="zebra">
+        <table class="pure-table pure-table-bordered pure-table-striped">
             <thead>
             <tr>
                 <th>Juna</th>
@@ -116,5 +140,11 @@
 <style>
     table {
         width: 100%;
+    }
+
+    .cateogry-container {
+        display: grid;
+        grid-gap: 0.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
     }
 </style>

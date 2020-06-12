@@ -38,6 +38,7 @@
     "lodash": "^4.17.15",
     "mqtt": "^4.1.0",
     "mqtt-match": "^2.0.3",
+    "purecss": "^2.0.3",
     "sirv-cli": "^0.4.4",
     "svelte-spa-router": "^2.1.0",
     "unfetch": "^4.1.0"

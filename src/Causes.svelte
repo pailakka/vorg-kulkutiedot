@@ -12,7 +12,7 @@
 </script>
 {#if displayCauses}
     {#each displayCauses as cause,i (cause.id) }
-        <span title={cause.name}>{cause.code}</span>{#if i < displayCauses.length-1}, {/if}
+        <span>{cause.name}</span>{#if i < displayCauses.length-1}, {/if}
     {/each}
 {:else}
     <span>{causes.map(cause => cause.thirdCategoryCode || cause.detailedCategoryCode || cause.categoryCode).join(', ')}</span>

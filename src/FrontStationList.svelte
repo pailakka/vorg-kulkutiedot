@@ -1,10 +1,11 @@
 <script>
-    import { link } from 'svelte-spa-router'
-    import { sortBy } from 'lodash'
-    import { stations } from './stores/metadata'
-    import { trains } from './stores/trains'
-    import { settings } from './stores/settings'
-    import { filterTrains } from './lib/util'
+    import {link} from 'svelte-spa-router'
+    import {sortBy} from 'lodash'
+    import {stations} from './stores/metadata'
+    import {trains} from './stores/trains'
+    import {settings} from './stores/settings'
+    import {CATEGORY_TRANSLATE} from "./stores/domain/trains";
+    import {filterTrains} from './lib/util'
 
     let stationsByFirstLetter = {}
     let firstLetters = []
@@ -27,22 +28,54 @@
     }
 </script>
 <div>
-    <h3>Suodattimet</h3>
-    <label>Näytä vain junalajit <select multiple bind:value={$settings.filterTrainCategories}>
-        {#each $trains.getCategories() as category}
-            <option value={category}>
-                {category}
-            </option>
-        {/each}
-    </select></label><br/>
-    <label>Näytä vain junatyypit <input type=text bind:value={$settings.filterTrainTypes}></label><br/>
-    <label>Näytä vain linjatunnukset <input type=text bind:value={$settings.filterCommuterLineID}></label><br/>
-    <label>Näytä vain kulussa olevat junat <input type=checkbox bind:checked={$settings.showOnlyRunning}></label><br/>
-    <label>Näytä vain asemat joilla junia <input type=checkbox bind:checked={$settings.hideEmptyStations}></label>
+    <form class="pure-form pure-form-stacked">
+        <fieldset>
+            <legend><h3>Suodattimet</h3></legend>
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <br/>
+                    <button class="pure-button"
+                            class:pure-button-active={$settings.showOnlyRunning}
+                            on:click={() => $settings.showOnlyRunning = !$settings.showOnlyRunning}
+                            type="button">
+                        {$settings.showOnlyRunning ? "Näytä vain kulussa olevat junat" : "Näytä kaikki junat"}
+                    </button>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <br/>
+                    <button class="pure-button"
+                            class:pure-button-active={!$settings.hideEmptyStations}
+                            on:click={() => $settings.hideEmptyStations = !$settings.hideEmptyStations}
+                            type="button">
+                        {$settings.hideEmptyStations ? "Näytä kaikki asemat" : "Näytä vain asemat joilla junia"}
+                    </button>
+                </div>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <label>Näytä vain junatyypit</label>
+                    <input type=text bind:value={$settings.filterTrainTypes} class="pure-u-23-24">
+                </div>
+                <div class="pure-u-1 pure-u-md-1-4">
+                    <label>Näytä vain linjatunnukset</label>
+                    <input type=text bind:value={$settings.filterCommuterLineID} class="pure-u-23-24">
+                </div>
+            </div>
+            <fieldset>
+                <legend>Suodata junalajeja</legend>
+                <div class="cateogry-container">
+                    {#each $trains.getCategories() as category}
+                        <div class="category-input">
+                            <label>{CATEGORY_TRANSLATE[category] || category} <input type="checkbox" value={category}
+                                                                                     bind:group={$settings.filterTrainCategories}/></label>
+                        </div>
+                    {/each}
+                </div>
+            </fieldset>
+        </fieldset>
+    </form>
 </div>
 {#each  firstLetters as firstLetter}
     <fieldset>
-        <legend>{firstLetter}</legend>
+        <legend><h3>{firstLetter}</h3></legend>
         <div class="station-container">
             {#each stationsByFirstLetter[firstLetter] as station}
                 {#if !$settings.hideEmptyStations || station.trainCount > 0}
@@ -58,7 +91,7 @@
 <style>
     .station-badge {
         text-align: center;
-        border: 2px solid black;
+        border: 1px solid black;
         padding: 3px;
         color: black
     }
@@ -67,6 +100,12 @@
         display: grid;
         grid-gap: 0.5rem;
         grid-template-columns: repeat(auto-fit, 90px);
+    }
+
+    .cateogry-container {
+        display: grid;
+        grid-gap: 0.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
     }
 </style>
 

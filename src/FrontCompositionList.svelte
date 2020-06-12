@@ -1,14 +1,43 @@
 <script>
+    import {compositions} from './stores/compositions'
     import {link} from 'svelte-spa-router'
     import {trains} from './stores/trains'
-    import {CATEGORY_TRANSLATE} from "./stores/domain/trains";
     import {settings} from './stores/settings'
-    import {filterTrains} from './lib/util'
-    import TrainBadge from './TrainBadge.svelte'
-    import FormattedDate from './FormattedDate.svelte'
+    import {filterTrains} from "./lib/util";
+    import TrainBadge from "./TrainBadge.svelte";
+    import {CATEGORY_TRANSLATE} from "./stores/domain/trains";
 
+    let compTypes = {}
+    let compTypeKeys = null
+    $: {
+        for (const k in $compositions) {
+            if (!$compositions.hasOwnProperty(k)) {
+                continue
+            }
+
+            const comp = $compositions[k]
+
+            comp.journeySections.forEach(js => {
+                js.locomotives.forEach(loco => {
+                    if (compTypes[loco.locomotiveType] === undefined) {
+                        compTypes[loco.locomotiveType] = new Set()
+                    }
+                    compTypes[loco.locomotiveType].add(comp.key)
+                })
+
+                js.wagons.forEach(loco => {
+                    if (compTypes[loco.wagonType] === undefined) {
+                        compTypes[loco.wagonType] = new Set()
+                    }
+                    compTypes[loco.wagonType].add(comp.key)
+                })
+            })
+        }
+
+        compTypeKeys = Object.keys(compTypes)
+        compTypeKeys.sort()
+    }
 </script>
-<span>Junien tiedot päivitetty: <FormattedDate date={$trains.updated}/></span>
 <div>
     <form class="pure-form pure-form-stacked">
         <fieldset>
@@ -46,18 +75,22 @@
         </fieldset>
     </form>
 </div>
-{#each $trains.trainsByCategory() as category (category.key)}
-    <fieldset>
-        <legend><h3>{CATEGORY_TRANSLATE[category.key] || category.key}</h3></legend>
-        <div class="front-train-container">
-            {#each category.trains.filter(filterTrains($settings)) as train (train.key)}
-                <a href={`/train/${train.key}`} use:link>
-                    <TrainBadge train={train}/>
-                </a>
-            {/each}
-        </div>
-    </fieldset>
-{/each}
+{#if compTypeKeys.length > 0}
+    <div>
+        {#each compTypeKeys as compType (compType)}
+            <fieldset>
+                <legend><h3>{compType}</h3></legend>
+                <div class="front-train-container">
+                    {#each $trains.getTrainsByKeys(Array.from(compTypes[compType]),filterTrains($settings)) as train}
+                        <a href={`/train/${train.key}`} use:link>
+                            <TrainBadge train={train}/>
+                        </a>
+                    {/each}
+                </div>
+            </fieldset>
+        {/each}
+    </div>
+{/if}
 
 <style>
     .front-train-container {

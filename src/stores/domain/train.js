@@ -36,7 +36,7 @@ class TimeTableRow {
 const LATE_TOLERANCE = {
   'Long-distance': 5,
   'Commuter': 3,
-  'Cargo': 2
+  'Cargo': 10
 }
 
 export class Train {
@@ -60,7 +60,7 @@ export class Train {
     this.lastPassedTimetableRow = this.getLastPassedTimetableRow()
     this.lateToleranceMinutes = LATE_TOLERANCE[this.trainCategory]
     this.isLate = this.lastPassedTimetableRow && this.lastPassedTimetableRow.differenceInMinutes >= this.lateToleranceMinutes
-    this.isEarly = this.lastPassedTimetableRow && this.lastPassedTimetableRow.differenceInMinutes < 0
+    this.isEarly = this.lastPassedTimetableRow && this.lastPassedTimetableRow.differenceInMinutes < -15
     this.isPartcancelled = this.timeTableRows.some(ttr => ttr.cancelled)
     this.hasTrainReady = this.timeTableRows.some(ttr => ttr.trainReady !== undefined)
   }
@@ -92,6 +92,7 @@ export class Train {
     for (let i = this.timeTableRows.length - 1; i >= 0; i--) {
       const ttr = this.timeTableRows[i]
       if (ttr.trainReady) {
+        ttr.trainReady.ttr = ttr
         return ttr.trainReady
       }
     }

@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store'
 
 const DEFAULT_SETTINGS = {
-  showOnlyRunning: false,
+  showOnlyRunning: true,
   filterTrainCategories: [],
   filterTrainTypes: '',
   filterCommuterLineID: '',

@@ -21,13 +21,13 @@
 <style>
     .train-badge {
         text-align: center;
-        border: 2px solid black;
+        border: 1px solid black;
         padding: 3px;
         color: black
     }
 
     .adhoc {
-        border-color: blue;
+        border: 2px solid blue;
     }
 
     .trainready {
