@@ -35,7 +35,7 @@
     "@babel/polyfill": "^7.8.7",
     "@babel/runtime": "^7.10.2",
     "es6-shim": "^0.35.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mqtt": "^4.1.0",
     "mqtt-match": "^2.0.3",
     "purecss": "^2.0.3",
